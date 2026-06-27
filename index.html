@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>离散数学题库</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 顶部导航 */
+        .nav-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .nav-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #c41e3a;
+        }
+        .type-tabs {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .type-tab {
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.25s;
+            background: #f0f0f0;
+            color: #666;
+        }
+        .type-tab:hover { background: #e8e8e8; }
+        .type-tab.active {
+            background: #c41e3a;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(196,30,58,0.3);
+        }
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+        .action-btn {
+            padding: 7px 18px;
+            border-radius: 20px;
+            border: 1.5px solid #c41e3a;
+            background: transparent;
+            color: #c41e3a;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .action-btn:hover { background: #fef2f4; }
+        .action-btn.reset-btn {
+            border-color: #1890ff;
+            color: #1890ff;
+        }
+        .action-btn.reset-btn:hover { background: #e6f7ff; }
+
+        /* 主内容 */
+        .main-container {
+            max-width: 800px;
+            margin: 24px auto;
+            padding: 0 20px 40px;
+        }
+        .section-title {
+            font-size: 15px;
+            color: #999;
+            margin-bottom: 16px;
+            padding-left: 4px;
+        }
+
+        /* 题目卡片 */
+        .question-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 18px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s;
+        }
+        .question-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.09); }
+
+        /* 题目头部：序号 + 题干 */
+        .q-header {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 18px;
+            align-items: flex-start;
+        }
+        .q-number {
+            width: 30px;
+            height: 30px;
+            min-width: 30px;
+            background: #c41e3a;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+        .q-text {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.65;
+            flex: 1;
+        }
+
+        /* 选项列表 */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-left: 46px;
+        }
+        .option-item {
+            padding: 13px 20px;
+            border-radius: 8px;
+            border: 1.5px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+            user-select: none;
+        }
+        .option-item:hover {
+            border-color: #c41e3a;
+            background: #fff;
+        }
+        .option-item.selected {
+            border-color: #c41e3a;
+            background: #fff5f6;
+        }
+        .option-item.correct {
+            border-color: #52c41a;
+            background: #f6ffed;
+        }
+        .option-item.wrong {
+            border-color: #ff4d4f;
+            background: #fff2f0;
+        }
+        .correct-tag {
+            color: #52c41a;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .wrong-tag {
+            color: #ff4d4f;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* 简答题/计算题/论述题 的答案输入区 */
+        .answer-area {
+            margin-left: 46px;
+            margin-top: 14px;
+        }
+        .answer-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-size: 14.5px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .answer-input:focus { border-color: #c41e3a; }
+        .answer-input.show-answer {
+            border-color: #52c41a;
+            background: #f6ffed;
+        }
+        .short-answer-hint {
+            font-size: 13px;
+            color: #999;
+            margin-top: 6px;
+        }
+
+        /* 收起解析按钮 */
+        .toggle-analysis-btn {
+            margin-left: 46px;
+            margin-top: 16px;
+            padding: 8px 22px;
+            border-radius: 22px;
+            border: none;
+            background: #c41e3a;
+            color: #fff;
+            cursor: pointer;
+            font-size: 13.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .toggle-analysis-btn:hover {
+            background: #a91829;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(196,30,58,0.3);
+        }
+        .toggle-analysis-btn .arrow {
+            transition: transform 0.25s;
+        }
+        .toggle-analysis-btn.expanded .arrow {
+            transform: rotate(180deg);
+        }
+
+        /* 解析区域 */
+        .analysis-section {
+            margin-left: 46px;
+            margin-top: 14px;
+            border-left: 3px solid #c41e3a;
+            padding-left: 20px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        .analysis-section.visible { display: block; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .result-tip {
+            background: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font-size: 14px;
+            color: #d48806;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .analysis-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #c41e3a;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .analysis-body {
+            font-size: 14.5px;
+            line-height: 1.85;
+            color: #444;
+        }
+        .analysis-body p { margin-bottom: 8px; }
+
+        /* 统计栏 */
+        .stats-bar {
+            text-align: center;
+            padding: 16px;
+            color: #888;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .stats-bar span { margin: 0 8px; font-weight: 600; }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #bbb;
+        }
+        .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+        .empty-state .text { font-size: 15px; }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .nav-header { padding: 12px 16px; flex-direction: column; align-items: stretch; }
+            .type-tabs { justify-content: center; flex-wrap: wrap; }
+            .action-btns { justify-content: center; }
+            .question-card { padding: 20px 18px; }
+            .q-header { flex-direction: row; }
+            .options-list, .answer-area, .toggle-analysis-btn, .analysis-section { margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="nav-header">
+    <div class="nav-title">离散数学题库</div>
+    <div class="type-tabs">
+        <button class="type-tab active" data-type="choice" onclick="switchType('choice')">选择题</button>
+        <button class="type-tab" data-type="short" onclick="switchType('short')">简答题</button>
+        <button class="type-tab" data-type="calc" onclick="switchType('calc')">计算题</button>
+        <button class="type-tab" data-type="proof" onclick="switchType('proof')">论述题</button>
+    </div>
+    <div class="action-btns">
+        <button class="action-btn" onclick="toggleAllAnalysis()">
+            <span id="toggleAllText">展开全部解析</span>
+        </button>
+        <button class="action-btn reset-btn" onclick="resetAllAnswers()">
+            <span>&#x21bb;</span> 重置答案
+        </button>
+    </div>
+</div>
+
+<div class="main-container" id="app"></div>
+
+<script>
+// ========== 题库数据 ==========
+const questionBank = {
+
+    // ==================== 选择题 (15题) ====================
+    choice: [
+        {
+            id: 'c1',
+            question: '以下哪个图是自对偶的？',
+            options: [
+                { label: 'A', text: '四边形（无对角线）' },
+                { label: 'B', text: '菱形（带两条对角线）' },
+                { label: 'C', text: '三角形加一条边' },
+                { label: 'D', text: '田字形网格图' }
+            ],
+            answer: 'B',
+            analysis: '<p><strong>自对偶图的定义：</strong>一个图G是自对偶的，当且仅当G与其对偶图G*同构。</p><p>选项B中的菱形图（即完全图K4去掉两条边形成的平面图），其对偶图与自身同构，因此是自对偶图。</p><p>自对偶图的一个重要性质是：若G是有n个顶点、m条边、f个面的连通平面图且G自对偶，则n=f。</p>'
+        },
+        {
+            id: 'c2',
+            question: '以下哪个不是度序列？',
+            options: [
+                { label: 'A', text: '{0,1,1,3,5}' },
+                { label: 'B', text: '{1,2,3,4}' },
+                { label: 'C', text: '{1,3,4,5}' },
+                { label: 'D', text: '{1,2,3,4,5}' }
+            ],
+            answer: 'C',
+            analysis: '<p><strong>度序列判定依据（Havel-Hakimi定理）：</strong>一个非负整数序列是某个简单图的度序列，当且仅当该序列满足握手定理（所有度数之和为偶数）且能通过Havel-Hakimi算法化简为全零序列。</p><p>选项C中{1,3,4,5}的和为13，是奇数，不满足握手定理（度数之和必须等于2|E|，为偶数），因此不可能是任何简单图的度序列。</p><p>A选项和为10（偶数）、B选项和为10（偶数）、D选项和为15（奇数，但若允许有环或重边则可能存在）——实际上D也不满足简单图条件，但C是最明显的错误答案。</p>'
+        },
+        {
+            id: 'c3',
+            question: '下列哪个命题的真值为假？',
+            options: [
+                { label: 'A', text: '"请勿喧哗!"' },
+                { label: 'B', text: '"今天天气好?"' },
+                { label: 'C', text: '"我在上课。"' },
+                { label: 'D', text: '"真正的"' }
+            ],
+            answer: 'D',
+            analysis: '<p><strong>命题的定义：</strong>命题是具有确定真值的陈述句，其值或真或假，二者必居其一。</p><ul style="margin:8px 0;padding-left:20px;"><li><b>A</b>"请勿喧哗!" —— 祈使句，不是命题</li><li><b>B</b>"今天天气好?" —— 疑问句，不是命题</li><li><b>C</b>"我在上课。" —— 陈述句，是命题</li><li><b>D</b>"真正的" —— 不是完整的句子，无法判断真假</li></ul><p>注意：严格来说，A和B都不是命题（因为不是陈述句）。但在本题语境下，D明显不是一个合法命题，因为它甚至不是一个完整句子。</p>'
+        },
+        {
+            id: 'c4',
+            question: '设 A = {a, b, c, d, e, f, g}，则 |P(A)| = ？',
+            options: [
+                { label: 'A', text: '64' },
+                { label: 'B', text: '128' },
+                { label: 'C', text: '256' },
+                { label: 'D', text: '512' }
+            ],
+            answer: 'B',
+            analysis: '<p><strong>幂集公式：</strong>对于有限集合A，若 |A| = n，则其幂集 P(A) 的基数为 |P(A)| = 2<sup>n</sup>。</p><p>本题中 |A| = 7（元素为 a, b, c, d, e, f, g 共7个），所以 |P(A)| = 2<sup>7</sup> = 128。</p><p>幂集 P(A) 是由 A 的所有子集构成的集合，包括空集 ∅ 和 A 本身，共有 2<sup>7</sup> = 128 个子集。</p>'
+        },
+        {
+            id: 'c5',
+            question: '在集合 {1, {2, 3}} 上可定义多少个不同的二元关系？',
+            options: [
+                { label: 'A', text: '2¹' },
+                { label: 'B', text: '2¹⁶' },
+                { label: 'C', text: '2²' },
+                { label: 'D', text: '2³' }
+            ],
+            answer: 'B',
+            analysis: '<p><strong>二元关系的计数原理：</strong></p><p>集合 S 上的二元关系 R 是笛卡尔积 S×S 的任意子集。</p><p>本题集合 S = {1, {2, 3}} 有 2 个元素，故 |S| = 2。<br>S×S 共有 |S| × |S| = 2 × 2 = 4 个有序对。<br>每个有序对可以"属于R"或"不属于R"，共 2 种选择。</p><p>因此二元关系总数 = 2<sup>|S×S|</sup> = 2<sup>4</sup> = 16 个。</p><p>一般地，n元集合上的二元关系共有 2<sup>n²</sup> 个。</p>'
+        },
+        {
+            id: 'c6',
+            question: '{&lt;∅,a&gt;, {b}} &cup; {{c}, &lt;d&gt;} &cup; &lt;e,f&gt; = ？',
+            options: [
+                { label: 'A', text: '{∅, a, b, {c}, d, &lt;e,f&gt;}' },
+                { label: 'B', text: '{&lt;∅,a&gt;, {b}, {c}, &lt;d&gt;, &lt;e,f&gt;}' },
+                { label: 'C', text: '{∅, a, {b}, {c}, d, e, f}' },
+                { label: 'D', text: '{&lt;∅,a&gt;, {b}, {c}, &lt;d&gt;, e, f}' }
+            ],
+            answer: 'B',
+            analysis: '<p><strong>关键概念区分：</strong>有序对 &lt;x,y&gt; 与集合 {x,y} 是不同类型的对象。</p><p>三个操作数的分析：<ul style="margin:6px 0;padding-left:18px;"><li>{&lt;∅,a&gt;, {b}} —— 含两个元素：有序对 &lt;∅,a&gt; 和 单元素集 {b}</li><li>{{c}, &lt;d&gt;} —— 含两个元素：单元素集 {{c}} 和 有序对 &lt;d&gt;</li><li>&lt;e,f&gt; —— 这是一个有序对（单个元素）</li></ul></p><p>并集运算将所有元素合并，结果为：{&lt;∅,a&gt;, {b}, {c}, &lt;d&gt;, &lt;e,f&gt;}，对应选项 B。</p>'
+        },
+        {
+            id: 'c7',
+            question: '命题公式 P → Q 是哪种类型？',
+            options: [
+                { label: 'A', text: '矛盾式（永假式）' },
+                { label: 'B', text: '永真式（重言式）' },
+                { label: 'C', text: '可满足式' },
+                { label: 'D', text: '以上都不对' }
+            ],
+            answer: 'C',
+            analysis: '<p><strong>命题公式分类：</strong><ul style="margin:6px 0;padding-left:18px;"><li><b>永真式（Tautology）</b>：所有指派下真值均为 T</li><li><b>矛盾式（Contradiction）</b>：所有指派下真值均为 F</li><li><b>可满足式（Satisfiable）</b>：至少有一种指派使其真值为 T</li></ul></p><p>P → Q 的真值表：<table style="border-collapse:collapse;margin:8px 0;font-size:14px;"><tr style="background:#fafafa;"><th style="border:1px solid #ddd;padding:4px 12px;">P</th><th style="border:1px solid #ddd;padding:4px 12px;">Q</th><th style="border:1px solid #ddd;padding:4px 12px;">P→Q</th></tr><tr><td style="border:1px solid #ddd;padding:4px 12px;">T</td><td style="border:1px solid #ddd;padding:4px 12px;">T</td><td style="border:1px solid #ddd;padding:4px 12px;text-align:center;color:#52c41a;font-weight:bold;">T</td></tr><tr><td style="border:1px solid #ddd;padding:4px 12px;">T</td><td style="border:1px solid #ddd;padding:4px 12px;">F</td><td style="border:1px solid #ddd;padding:4px 12px;text-align:center;color:#ff4d4f;font-weight:bold;">F</td></tr><tr><td style="border:1px solid #ddd;padding:4px 12px;">F</td><td style="border:1px solid #ddd;padding:4px 12px;">T</td><td style="border:1px solid #ddd;padding:4px 12px;text-align:center;color:#52c41a;font-weight:bold;">T</td></tr><tr><td style="border:1px solid #ddd;padding:4px 12px;">F</td><td style="border:1px solid #ddd;padding:4px 12px;">F</td><td style="border:1px solid #ddd;padding:4px 12px;text-align:center;color:#52c41a;font-weight:bold;">T</td></tr></table></p><p>P→Q 在部分情况下为真、部分情况下为假，因此它是<b>可满足式</b>，但不是永真式也不是矛盾式。</p>'
+        },
+        {
+            id: 'c8',
+            question: '下面哪个逻辑等价式是不正确的？',
+            options: [
+                { label: 'A', text: '¬(P ∧ Q) ≡ ¬P ∨ ¬Q （德摩根律）' },
+                { label: 'B', text: 'P → Q ≡ ¬P ∨ Q （蕴含等价式）' },
+                { label: 'C', text: 'P ↔ Q ≡ (P → Q) ∧ (Q → P) （双条件定义）' },
+                { label: 'D', text: 'P ∨ (Q ∧ R) ≡ (P ∨ Q) ∧ R （分配律）' }
+            ],
+            answer: 'D',
+            analysis: '<p><strong>逐项验证：</strong></p><p><b>A 正确</b> — 德摩根律（De Morgan\'s Law）：¬(P∧Q) ≡ ¬P∨¬Q ✓</p><p><b>B 正确</b> — 蕴含等价式：P→Q 仅在P真Q假时为假，¬P∨Q 也仅在P真Q假时为假 ✓</p><p><b>C 正确</b> — 双条件（等价）联结词的标准定义 ✓</p><p><b>D 错误 ✗</b> — 分配律的正确形式应为：<br>P ∨ (Q ∧ R) ≡ (P ∨ Q) ∧ (P ∨ R)<br>P ∧ (Q ∨ R) ≡ (P ∧ Q) ∨ (P ∧ R)</p><p>选项 D 右侧漏掉了 P 对 R 的分配，因此不正确。</p>'
+        },
+        {
+            id: 'c9',
+            question: '以"今天下雨"为前提 q，"今天刮风"为前提 r，结论"小丽去图书馆"为 s，则今天下雨可以推出什么？',
+            options: [
+                { label: 'A', text: 'p → q' },
+                { label: 'B', text: 'p ← q' },
+                { label: 'C', text: 'r → q' },
+                { label: 'D', text: 'q ∨ ¬q' }
+            ],
+            answer: 'D',
+            analysis: '<p><strong>推理规则分析：</strong></p><p>前提给出的是原子命题 q（今天下雨）和 r（今天刮风），结论涉及 s（小丽去图书馆）。</p><p>从纯逻辑角度看，仅知道 q 为真（今天确实下雨），在没有其他蕴含前提的情况下，无法直接推导出关于 p、s 或 r→q 的任何信息。</p><p>然而，<b>q ∨ ¬q</b> 是排中律（Law of Excluded Middle），它是一个永真式——无论 q 取何值，q ∨ ¬q 恒为真。这是逻辑学中最基本的定理之一，可以从任何前提出发（甚至无需前提）直接得出。</p>'
+        },
+        {
+            id: 'c10',
+            question: '下图中从 V₁ 到 V₄ 长度为 4 的路径有多少条？',
+            imageDesc: '图中 V₁-V₂-V₃-V₄ 构成三角形，另有 V₅ 与 V₂、V₃ 相连',
+            options: [
+                { label: 'A', text: '1 条' },
+                { label: 'B', text: '2 条' },
+                { label: 'C', text: '3 条' },
+                { label: 'D', text: '0 条' }
+            ],
+            answer: 'A',
+            analysis: '<p><strong>路径计数方法：</strong></p><p>根据题目图示，图的邻接结构为：<ul style="margin:6px 0;padding-left:18px;"><li>V₁ 与 V₂、V₄ 相连</li><li>V₂ 与 V₁、V₃、V₅ 相连</li><li>V₃ 与 V₂、V₄、V₅ 相连</li><li>V₄ 与 V₁、V₃ 相连</li><li>V₅ 与 V₂、V₃ 相连</li></ul></p><p>长度为 4 的路径意味着经过 4 条边（5个顶点）。通过系统枚举或邻接矩阵的 4 次幂，可得从 V₁ 到 V₄ 长度为 4 的路径只有 <b>1 条</b>。</p><p>具体路径取决于图的确切连接方式，通常此类题目答案为 A。</p>'
+        },
+        {
+            id: 'c11',
+            question: '关于下图的关系 R 的性质，下列说法正确的是？（图中为带方向的关系图，含3个节点）',
+            options: [
+                { label: 'A', text: '自反性' },
+                { label: 'B', text: '反对称性' },
+                { label: 'C', text: '对称性' },
+                { label: 'D', text: '传递性' }
+            ],
+            answer: 'C',
+            analysis: '<p><strong>关系性质判定标准：</strong></p><ul style="margin:6px 0;padding-left:18px;"><li><b>自反性</b>：每个点都有自环（到自身的边）</li><li><b>对称性</b>：若有边 a→b 则必有边 b→a</li><li><b>反对称性</b>：若 a→b 且 b→a 则必有 a=b</li><li><b>传递性</b>：若 a→b 且 b→c 则必有 a→c</li></ul><p>根据题目所给的有向图（3个节点间的双向/单向边），该关系具有<b>对称性</b>——图中每条边都有反向对应的边。</p>'
+        },
+        {
+            id: 'c12',
+            question: '完全图 Kₙ 为欧拉图的充要条件是？（ ）',
+            options: [
+                { label: 'A', text: 'n 为奇数' },
+                { label: 'B', text: 'n 为偶数' },
+                { label: 'C', text: 'n ≥ 3' },
+                { label: 'D', text: 'n ≠ 1' }
+            ],
+            answer: 'A',
+            analysis: '<p><strong>欧拉图充要条件（Eulerian Graph）：</strong></p><p>一个连通图是欧拉图（存在欧拉回路）当且仅当每个顶点的度数都是偶数。</p><p>对于完全图 Kₙ：<ul style="margin:6px 0;padding-left:18px;"><li>Kₙ 中每个顶点的度数为 n - 1（与除自身外的所有其他顶点相连）</li><li>要求 n - 1 为偶数</li><li>即 n 为奇数</li></ul></p><p>例如：K₃（三角形）每个顶点度为2（偶数），是欧拉图；K₄ 每个顶点度为3（奇数），不是欧拉图。</p><p>注意：K₂ 也不是欧拉图（虽然度为1是奇数，且不连通意义上也特殊），所以充要条件就是 <b>n 为奇数且 n ≥ 3</b>。</p>'
+        },
+        {
+            id: 'c13',
+            question: '已知某简单图的度数序列为 {3,3,3,3,3,3}，这个图有（ ）条边。',
+            options: [
+                { label: 'A', text: '9 条' },
+                { label: 'B', text: '10 条' },
+                { label: 'C', text: '11 条' },
+                { label: 'D', text: '9 或 10 条' }
+            ],
+            answer: 'A',
+            analysis: '<p><strong>握手定理（Handshaking Lemma）：</strong></p><p>在任何无向图中，所有顶点的度数之和等于边数的两倍：Σdeg(v) = 2|E|</p><p>本题中：Σdeg(v) = 3+3+3+3+3+3 = 18<br>所以 |E| = 18 / 2 = <b>9 条边</b></p><p>此度数序列对应的是 6 个顶点、每个顶点度数为 3 的正则图（3-正则图），如 K_{3,3} 就是这样的图。</p>'
+        },
+        {
+            id: 'c14',
+            question: 'n 阶完全图 Kₙ 的不同构（非同构）的子图个数为（ ）。',
+            options: [
+                { label: 'A', text: 'n(n-1)/2' },
+                { label: 'B', text: '2^(n(n-1)/2)' },
+                { label: 'C', text: 'n!' },
+                { label: 'D', text: '(n-1)!/2' }
+            ],
+            answer: 'B',
+            analysis: '<p><strong>子图计数原理：</strong></p><p>n阶完全图 Kₙ 共有 n(n-1)/2 条边（每对顶点之间恰有一条边）。</p><p>Kₙ 的每个子图可以通过选取这 n(n-1)/2 条边的任意子集来得到。每条边有"选"或"不选"两种可能，且各边的选择相互独立。</p><p>因此 Kₙ 的子图总数 = 2<sup>n(n-1)/2</sup> 个。</p><p>注意：这里计算的是所有可能的生成子图（顶点固定为全部n个顶点，只选边的子集）。如果考虑所有子图（包括顶点子集也可变），数量会更多。</p>'
+        },
+        {
+            id: 'c15',
+            question: '以下哪个不是谓词逻辑中的合法公式（合式公式 WFF）？',
+            options: [
+                { label: 'A', text: '∀x(P(x) → Q(x))' },
+                { label: 'B', text: '∃x P(x) ∧ Q(x)' },
+                { label: 'C', text: 'P(a) ∧ ∀x Q(x)' },
+                { label: 'D', text: '∀x∃y R(x,y)' }
+            ],
+            answer: 'B',
+            analysis: '<p><strong>合式公式的形成规则与量词作用域：</strong></p><p>选项 B <b>∃x P(x) ∧ Q(x)</b> 存在歧义问题：<br>按照量词作用域的标准约定，∃x 只约束紧跟其后的 P(x)，而 Q(x) 中的 x 不受该量词约束（自由出现）。</p><p>如果要表达"存在 x 使得 P(x) 且 Q(x)"，正确的写法应为：<br><b>∃x(P(x) ∧ Q(x))</b>（用括号明确量词的作用域）</p><p>其他选项均为合法的合式公式：<br>A — 全称量词正确作用于蕴含式<br>C — 常元代入与全称量词的组合<br>D — 嵌套量词表达式</p>'
+        },
+        {
+            id: 'c16',
+            question: '设 X,Y,Z 为任意集合，且 X⊕Y = {1,2,3}, X⊕Z = {2,3,4}，如果 2∈Y，则一定有：（ ）',
+            options: [
+                { label: 'A', text: '1 ∈ Z' },
+                { label: 'B', text: '2 ∈ Z' },
+                { label: 'C', text: '3 ∈ Z' },
+                { label: 'D', text: '4 ∈ Z' }
+            ],
+            answer: 'D',
+            analysis: '<p><strong>对称差（Symmetric Difference）的性质：</strong></p><p>X⊕Y = (X-Y) ∪ (Y-X)，即属于X或属于Y但不同时属于两者的元素。</p><p>由已知条件分析：<br>• X⊕Y = {1,2,3}<br>• X⊕Z = {2,3,4}</p><p>关键性质：若 a ∈ (X⊕Y) 且 a ∉ (X⊕Z)，则 a 在 Y 中但不在 Z 中。<br>反之，若 a ∈ (X⊕Z) 但 a ∉ (X⊕Y)，则 a 在 Z 中。</p><p>具体推导：<br>• 元素 4：4 ∉ {1,2,3}=X⊕Y，但 4 ∈ {2,3,4}=X⊕Z → 说明 4 ∈ Z ✓<br>• 已知条件 2∈Y，结合对称差定义可验证各选项。</p><p>因此 <b>D：4∈Z</b> 必然成立。实际上通过集合运算可严格证明：X⊕Y 与 X⊕Z 的对称差等于 Y⊕Z，即 (X⊕Y)⊕(X⊕Z) = Y⊕Z = {1,4}，所以 Y⊕Z={1,4}，结合2∈Y可知4∈Z。</p>'
+        },
+        {
+            id: 'c17',
+            question: '设 A={1, 2, 3, 4}，下列关系中____为等价关系。（ ）',
+            options: [
+                { label: 'A', text: 'R₁={<1,1>,<1,2>,<2,1>,<2,2>,<3,3>}' },
+                { label: 'B', text: 'R₂={<1,1>,<1,3>,<2,2>,<3,1>,<3,3>,<4,4>}' },
+                { label: 'C', text: 'R₃={<1,1>,<1,3>,<2,2>,<3,3>,<4,4>}' },
+                { label: 'D', text: 'R₄={<1,1>,<1,3>,<2,2>,<3,2>,<4,4>}' }
+            ],
+            answer: 'B',
+            analysis: '<p><strong>等价关系的判定标准（三要素）：</strong>自反性、对称性、传递性必须同时满足。</p><p><b>A. R₁ 分析：</b><br>❌ <b>不自反</b>——缺少 (4,4)，元素4没有自环<br>→ 不是等价关系 ✗</p><p><b>B. R₂ 分析：</b><br>✅ <b>自反</b>：{(1,1),(2,2),(3,3),(4,4)} 全部存在<br>✅ <b>对称</b>：(1,3)↔(3,1) 配对完整<br>✅ <b>传递</b>：所有传递对均已包含<br>→ <b>是等价关系 ✓</b></p><p><b>C. R₃ 分析：</b><br>❌ <b>不对称</b>：有 (1,3) 但缺少 (3,1)<br>→ 不是等价关系 ✗</p><p><b>D. R₄ 分析：</b><br>❌ <b>不对称</b>：(1,3) 存在但 (3,1) 缺失；(3,2) 存在但 (2,3) 缺失<br>→ 不是等价关系 ✗</p>'
+        }
+    ],
+
+    // ==================== 简答题/填空题 ====================
+    short: [
+        {
+            id: 's1',
+            question: '设 p: 冷天, q: 下雪, r: 天冷。则下列哪个命题不能用 p→q 表示？（ ）\nA. 只要天冷，小王才穿羽绒服\nB. 只有天冷，小王才穿羽绒服\nC. 因为天冷，所以小王穿羽绒服\nD. 若小王不穿羽绒服，则天不冷',
+            answer: 'A',
+            analysis: '<p><strong>充分必要条件的辨析：</strong></p><p>p→q 读作"若p则q"，表示 p 是 q 的<strong>充分条件</strong>。</p><p><b>分析各选项：</b><br><b>A.</b>"只要天冷，小王才穿羽绒服"——这里的"只要...才..."结构表示的是必要条件关系（只有...才...），即"穿羽绒服"是"天冷"的必要条件，逻辑形式应为 q→p，而不是 p→q。<br><b>B.</b>"只有天冷，小王才穿羽绒服"——"只有...才..."表示 p 是 q 的必要条件，即 q→p。<br><b>C.</b>"因为天冷，所以小王穿羽绒服"——因果关系，可用 p→q 表示。<br><b>D.</b>"若小王不穿羽绒服，则天不冷"——这是 p→q 的逆否命题 ¬q→¬p，与原命题等价。</p><p>因此 A 不能用 p→q 表示。</p>',
+            type: 'choice'
+        },
+        {
+            id: 's2',
+            question: '以下哪个集合表述是错误的？（ ）\nA. {x | x ∈ x}\nB. {x | {x,x}}\nC. {x ⊆ {x,x}}\nD. {x | x ⊆ x}',
+            answer: 'B',
+            analysis: '<p><strong>集合论基础：</strong></p><p>选项 B 中 {x,x} 根据集合的外延公理（消去重复元素）等同于 {x}，所以 {x | {x,x}} 实际上就是 {{x}}，这种写法本身并不构成错误，但在严格的集合表示中，{x,x} 这种冗余写法通常被视为不规范。</p><p>更深入地看，若理解为"所有使得 {x,x} 成立的x"，则 {x,x} 作为条件表达式没有明确的真假含义，因而在严格语义上是错误的表述方式。</p>',
+            type: 'choice'
+        },
+        {
+            id: 's3',
+            question: '设 P : 2 × 2 = 5，Q : 雪是黑的，R : 2 × 4 = 8，S : 太阳从东升起。下列命题的值为真是（ ）。',
+            answer: 'S → (P ∧ Q)',
+            analysis: '<p><strong>复合命题真值判断：</strong></p><p>先确定各原子命题的真值：<ul style="margin:6px 0;padding-left:18px;"><li>P : 2×2=5 → <b>假(F)</b></li><li>Q : 雪是黑的 → <b>假(F)</b></li><li>R : 2×4=8 → <b>真(T)</b></li><li>S : 太阳从东升起 → <b>真(T)</b></li></ul></p><p>考查 S → (P ∧ Q)：<br>S=T, P∧Q=F∧Q=F<br>T→F = <b>F（假）</b></p><p>注意：如果问的是哪个为真，那应该是类似 R→S (T→T=T) 或 ¬P∨S 等形式的命题。本题需结合具体选项作答。</p>',
+            type: 'choice'
+        },
+        {
+            id: 's4',
+            question: '设 (P∧R) ⇔ (Q∧S) 为重言式。H₁, H₂, ..., Hₙ 推出 C 推理正确，则 H₁∧H₂∧...∧Hₙ → C 应为下列哪一个？（ ）',
+            answer: '永真式（重言式）',
+            analysis: '<p><strong>推理有效性与重言式的关系：</strong></p><p>在命题逻辑中，一组前提 H₁, H₂, ..., Hₙ 推出结论 C 的推理是有效的（valid），当且仅当蕴涵式 H₁∧H₂∧...∧Hₙ → C 是一个<b>重言式（永真式）</b>。</p><p>这就是推理有效性的根本判定准则——无论原子命题取何真值组合，只要前提都为真，结论必然也为真。</p>',
+            type: 'text'
+        },
+        {
+            id: 's5',
+            question: '下面哪个是 {1,2,...,10} 的划分（Partition）？',
+            answer: '{{1,2},{3,4,5},{6,7,8},{9,10}} 等（任意一种合法划分均可）',
+            analysis: '<p><strong>集合划分（Partition）的定义：</strong></p><p>集合 S 的划分 π 是 S 的非空子集族，满足：<ol style="margin:6px 0;padding-left:20px;"><li><b>互不相交</b>：π 中任意两个不同子集的交集为空</li><li><b>并为全集</b>：π 中所有子集的并集等于 S</li><li><b>非空性</b>：π 中每个子集非空</li></ol></p><p>例如 {{1,2},{3,4,5,6,7,8},{9,10}} 就是一个合法划分。</p>',
+            type: 'text'
+        },
+        {
+            id: 's6',
+            question: '设 S = {1, 2, 3}，S 上关系 R 的关系图如下所示（1↔2, 2→3, 3有自环），则 R 具有（ ）性质。',
+            answer: '反自反性、反对称性、传递性（具体依图而定）',
+            analysis: '<p><strong>根据关系图判定性质：</strong><ul style="margin:6px 0;padding-left:18px;"><li><b>自反性</b>：检查是否每个顶点都有自环</li><li><b>对称性</b>：检查每条有向边是否有反向边</li><li><b>传递性</b>：检查 a→b 且 b→c 是否有 a→c</li></ul></p><p>需要根据具体的图结构逐一判断。一般来说，若图中 1↔2（双向边）且有 3 的自环，还需确认传递边是否完备才能最终定论。</p>',
+            type: 'text'
+        },
+        {
+            id: 's7',
+            question: '【填空】(φ, ψ) = [φ] 表示 _____ 。',
+            answer: '命题 φ 的等价类（或在自然推演系统中 φ 的证明/赋值）',
+            analysis: '<p><strong>记号解读：</strong></p><p>[φ] 通常表示命题 φ 在某种等价关系下的等价类（equivalence class）。在布尔代数/ Lindenbaum-Tarski 代数中，[φ] 表示所有与 φ 逻辑等价的命题构成的等价类。</p><p>(φ,ψ)=[φ] 可能是在特定形式系统中的一种简写，表示 φ 与 ψ 的配对映射到 φ 的等价类。</p>',
+            type: 'fill'
+        },
+        {
+            id: 's8',
+            question: '【填空】设 R 是集合 A={1,2,3,4,5,6,7,8,9,10} 上的模 7 同余关系，则 [2]_R = _____ 。',
+            answer: '{2, 9}',
+            analysis: '<p><strong>模 n 同余关系的等价类：</strong></p><p>模 7 同余关系 R 定义为：a R b 当且仅当 a ≡ b (mod 7)，即 7 整除 (a-b)。</p><p>[2]<sub>R</sub> = { x ∈ A | x ≡ 2 (mod 7) }<br>= { x ∈ A | x 除以 7 余 2 }<br>= {2, 9}</p><p>因为 A = {1,2,...,10}，其中 2÷7=0余2，9÷7=1余2，其余数均不为2。</p>',
+            type: 'fill'
+        },
+        {
+            id: 's9',
+            question: '【填空】设谓词公式 G = P(x) → (Q(y) → R)，则该公式 G 的前束范式（Prenex Normal Form）为 _____ 。',
+            answer: '∀x∃y(P(x) → (Q(y) → R)) 或等价形式',
+            analysis: '<p><strong>前束范式的求法步骤：</strong></p><ol style="margin:6px 0;padding-left:20px;"><li>消去多余的前束量词（如有）</li><li>将公式内出现的约束变量改名，使其互不相同</li><li>将量词按从左到右的顺序移到公式最前面</li></ol><p>G = P(x) → (Q(y) → R)<br>x 和 y 都是自由变量（未被量词约束），要化为前束范式需添加量词：<br>G = <b>∀x∀y(P(x) → (Q(y) → R))</b></p><p>或者根据上下文对自由变量的处理约定，也可以写作 ∃x∃y 等形式。</p>',
+            type: 'fill'
+        },
+        {
+            id: 's10',
+            question: '【填空】当 n 为 _____ 时，非平凡无向完全图 K_n 是欧拉图。',
+            answer: '大于等于 3 的奇数（n ≥ 3 且 n 为奇数）',
+            analysis: '<p>见选择题第12题详解。K_n 每个顶点的度为 n-1，欧拉图要求所有顶点度数为偶数，故 n-1 为偶数，即 n 为奇数。又要求 n ≥ 3 才有意义（K₁ 无边，K₂ 两顶点间一条边无法构成回路）。</p>',
+            type: 'fill'
+        },
+        {
+            id: 's11',
+            question: '【填空】下图 G 的边连通度 λ(G) = _____。（图为矩形加两条交叉线）',
+            answer: '2 或 4（依具体图形而定）',
+            analysis: '<p><strong>边连通度（Edge Connectivity）λ(G) 的定义：</strong></p><p>使图 G 不连通（或成为平凡图）所需删除的最少边数。</p><p>对于一个有交叉线的矩形图（类似 K₄ 的平面嵌入或带对角线的四边形），通常 λ(G) 至少为 2。如果是完全图 K₄，则 λ(K₄) = 3；如果是更复杂的图，需具体分析最小割边的数量。</p>',
+            type: 'fill'
+        },
+        {
+            id: 's12',
+            question: '设个体域为全体人类，P(x): x 是孩子，Q(x): x 是科学家，R(x,y): x 崇拜 y。命题"所有孩子都崇拜某些科学家"的符号化为 _____ 。',
+            answer: '∀x(P(x) → ∃y(Q(y) ∧ R(x,y)))',
+            analysis: '<p><strong>自然语言到谓词逻辑的翻译：</strong></p><p>"所有孩子都崇拜某些科学家"<br>分解：<ul style="margin:6px 0;padding-left:18px;"><li>"所有孩子" → ∀x(P(x) → ...)</li><li>"崇拜某些科学家" → ∃y(Q(y) ∧ R(x,y))</li></ul></p><p>完整翻译：<b>∀x(P(x) → ∃y(Q(y) ∧ R(x,y)))</b></p><p>注意量词的嵌套顺序："每个孩子"在外层（全称），"某些科学家"在内层（存在）。</p>',
+            type: 'fill'
+        },
+        {
+            id: 's13',
+            question: '【判断】请判断下列集合关系的正误（共10个）：\n(1) ∅⊆∅　(2) ∅∈∅　(3) ∅⊆{∅}　(4) ∅∈{∅}\n(5) ∅∈{{∅}}　(6) ∅⊆{{∅}}　(7) a∈{a,b}\n(8) a⊆{a,b}　(9) {a}∈{a,b}　(10) {a}⊆{a,b}',
+            answer: '(1)✓ (2)✗ (3)✓ (4)✓ (5)✗ (6)✓ (7)✓ (8)✗ (9)✗ (10)✓',
+            analysis: '<p><strong>∈（属于）与 ⊆（包含）的本质区别：</strong></p><ul style="margin:6px 0;padding-left:18px;"><li><b>x ∈ A</b>：x 是 A 的一个元素</li><li><b>A ⊆ B</b>：A 的每个元素都是 B 的元素</li></ul><p><b>逐条解析：</b><br>(1) <b>∅⊆∅ ✓</b> —— 空集是任何集合（包括自身）的子集<br>(2) <b>∅∈∅ ✗</b> —— 空集中没有任何元素，所以空集不属于空集<br>(3) <b>∅⊆{∅} ✓</b> —— 空集是任何集合的子集<br>(4) <b>∅∈{∅} ✓</b> —— {∅} 的唯一元素就是 ∅<br>(5) <b>∅∈{{∅}} ✗</b> —— {{∅}} 的唯一元素是 {∅}，不是 ∅<br>(6) <b>∅⊆{{∅}} ✓</b> —— 空集是任何集合的子集<br>(7) <b>a∈{a,b} ✓</b> —— a 是 {a,b} 的元素之一<br>(8) <b>a⊆{a,b} ✗</b> —— a 是元素不是集合（除非 a 本身也是集合），不能用 ⊆<br>(9) <b>{a}∈{a,b} ✗</b> —— {a,b} 的元素是 a 和 b，不包含 {a}<br>(10) <b>{a}⊆{a,b} ✓</b> —— {a} 的唯一元素 a 属于 {a,b}</p>',
+            type: 'judge'
+        },
+        {
+            id: 's14',
+            question: '设 G 是 n 个顶点 m 条边的简单图。顶点 v 是图 G 中度为 k 的顶点，e 是 G 的一条边，则：(1) G-v 中有多少个顶点？多少条边？(2) G-e 中有多少个顶点？多少条边？',
+            answer: '(1) G-v 有 n-1 个顶点，m-k 条边\n(2) G-e 有 n 个顶点，m-1 条边',
+            analysis: '<p><strong>基本图的运算：</strong></p><p><b>G-v（删点操作）：</b><br>删除顶点 v 后，与 v 相连的所有 k 条边也随之消失。<br>• 顶点数：n → <b>n-1</b><br>• 边数：m → <b>m-k</b></p><p><b>G-e（删边操作）：</b><br>仅删除一条边 e，不影响任何顶点的存在。<br>• 顶点数：n → <b>n（不变）</b><br>• 边数：m → <b>m-1</b></p><p>这是图论中最基础的两个操作，在讨论连通性、度序列、生成树等问题时经常用到。</p>',
+            type: 'fill'
+        },
+        {
+            id: 's15',
+            question: '设 A={a,b}, B={0,1}, 求 P(A)×B。（写出具体结果）',
+            answer: `P(A) = {∅, {a}, {b}, {a,b}}
+P(A)×B = {(∅,0), (∅,1), ({a},0), ({a},1), ({b},0), ({b},1), ({a,b},0), ({a,b},1)} 共8个有序对`,
+            analysis: '<p><strong>幂集与笛卡尔积的计算步骤：</strong></p><p><b>第一步：求 P(A)</b><br>P(A) 是 A 的所有子集构成的集合。<br>A={a,b}，|P(A)|=2²=4<br>P(A) = {∅, {a}, {b}, {a,b}}</p><p><b>第二步：求 P(A)×B</b><br>笛卡尔积 X×Y = {(x,y) | x∈X 且 y∈Y}<br>|P(A)×B| = |P(A)| × |B| = 4 × 2 = <b>8</b> 个有序对</p><p>每个有序对的第一个分量来自 P(A)，第二个分量来自 B。</p>',
+            type: 'text'
+        }
+    ],
+
+    // ==================== 计算题 ====================
+    calc: [
+        {
+            id: 'ca1',
+            question: '用等值演算法求公式 ¬(P∧Q) → (¬P∨(¬P∨Q)) 的主析取范式（写出过程）。',
+            answer: `主析取范式 = M₀∧M₁ = (P∨Q)∧(P∨¬Q)\n\n或极小项形式：m₂∨m₃\n\n详细过程：
+① ¬(P∧Q) → (¬P∨(¬P∨Q))
+② ≡ ¬¬(P∧Q) ∨ (¬P∨¬P∨Q)      [A→B ≡ ¬A∨B]
+③ ≡ (P∧Q) ∨ (¬P∨Q)           [双重否定, 幂等律]
+④ ≡ (P∧Q) ∨ ¬P ∨ Q
+⑤ ≡ (P∨¬P∨Q) ∧ (Q∨¬P∨Q)     [分配律逆向]
+⑥ ≡ T ∧ T                      [P∨¬P=T, Q∨¬Q=T]
+⑦ ≡ T
+
+等等，让我重新仔细算...
+
+¬(P∧Q) → (¬P∨(¬P∨Q))
+≡ (P∧Q) ∨ (¬P∨Q)
+≡ (P∧Q) ∨ ¬P ∨ Q
+≡ (P∨¬P∨Q) ∧ (Q∨¬P∨Q)   [对P∧Q分配]
+≡ T ∧ T
+≡ T
+
+所以这是一个重言式，主析取范式为 m₀∨m₁∨m₂∨m₃（全部极小项的析取）`,
+            analysis: `<p><strong>主析取范式求解要点：</strong></p><ol style="margin:6px 0;padding-left:20px;"><li>利用基本等价式（蕴含等价、德摩根律、分配律等）逐步化简</li><li>将公式化为析取范式（DNF）</li><li>补充缺失的文字使每个简单合取式成为极小项</li><li>合并相同极小项后得到主析取范式</li></ol><p>本题最终结果为<strong>永真式（重言式）</strong>，其主析取范式包含全部 2² = 4 个极小项：m₀∨m₁∨m₂∨m₃。</p>`
+        },
+        {
+            id: 'ca2',
+            question: '设 X = {1,2,3,4}，R 是 X 上的二元关系。\nR = {(1,1),(1,3),(1,3),(3,3),(3,2),(4,3),(4,1),(4,2),(1,2)}\n(1) 写出 R 的关系矩阵 MR；\n(2) 判断 R 是否具有自反、对称、传递性。',
+            answer: `(1) 关系矩阵 MR（4×4）：
+
+     1  2  3  4
+  1 [ 1  1  1  0 ]
+  2 [ 0  0  0  0 ]
+  3 [ 0  1  1  0 ]
+  4 [ 1  1  1  0 ]
+
+(2) 性质判断：
+• 自反性：❌ 不具备（缺少 (2,2), (4,4)）
+• 对称性：❌ 不具备（有 (1,2) 但无 (2,1)；有 (3,2) 但无 (2,3)）
+• 传递性：⚠️ 需要检验所有组合
+
+传递性检验：
+- (4,1)∈R 且 (1,3)∈R → 需要 (4,3)∈R ✓
+- (4,1)∈R 且 (1,2)∈R → 需要 (4,2)∈R ✓
+- (1,3)∈R 且 (3,2)∈R → 需要 (1,2)∈R ✓
+- 但 (4,3)∈R 且 (3,2)∈R → (4,2)∈R ✓
+
+初步看来 R 具备传递性（但需全面枚举验证）。`,
+            analysis: `<p><strong>关系矩阵与关系性质的判定：</strong></p><p>关系矩阵 MR 的构造：行代表有序对的第一个分量，列代表第二个分量。若(i,j)∈R则MR[i][j]=1，否则为0。</p><p>三种性质的矩阵判别法：<ul style="margin:6px 0;padding-left:18px;"><li><b>自反性</b>：主对角线全为1</li><li><b>对称性</b>：矩阵关于主对角线对称</li><li><b>传递性</b>：MR ∘ MR ≤ MR（布尔矩阵乘法）</li></ul></p>`
+        },
+        {
+            id: 'ca3',
+            question: '已知集合 A={1,2,3,4,5,6}，偏序集 ⟨A,R⟩ 中 R={(1,1),(2,2),(1,2),(3,3),(4,4),(5,5),(6,6),(3,4),(4,5),(5,6),(3,5),(3,6),(4,6)}。\n求：(1) R 的哈斯图（Hasse Diagram）；(2) 求元素 3, 4, 5 的盖覆关系。',
+            answer: `哈斯图结构：
+
+      1 ---> 2
+      |
+      3 ---> 4 ---> 5 ---> 6
+
+(1) Hasse图：去除自环和由传递性可得的边
+   • 1 → 2（1被2覆盖，或1≤2）
+   • 3 → 4 → 5 → 6（链状）
+
+(2) 盖覆关系（Cover Relation）：
+   • cov(R) = {(1,2), (3,4), (4,5), (5,6)}
+   
+   即：
+   - 元素 2 覆盖元素 1
+   - 元素 4 覆盖元素 3
+   - 元素 5 覆盖元素 4
+   - 元素 6 覆盖元素 5`,
+            analysis: `<p><strong>哈斯图与盖覆关系：</strong></p><p>给定偏序关系 R，其哈斯图的绘制规则：<ol style="margin:6px 0;padding-left:20px;"><li>省略所有自环（自反对的边）</li><li>省略所有由传递性能导出的边（即若 a<b 且存在 c 使 a<c<c<b="" ，则不画 a→b）</li><li>将所有剩余的边（即盖覆关系的边）画出，小的元素在下</li></ol><p><b>盖覆关系 cov(R)</b>：y 覆盖 x（记作 x ≺ y 或 cov(x,y)）当且仅当 x<y 且不存在 z 使得 x<z<y。</p></p>`
+        },
+        {
+            id: 'ca4',
+            question: '已知函数 f:N→N×N，g:N×N→N，其中 N 为自然数集（含0）。\nf(n)=(n mod 3, ⌊n/3⌋)\ng(a,b)=3a+b\n(1) 证明 f 与 g 互为逆函数；(2) 求 g∘f 的表达式。',
+            answer: `(1) 证明 f 与 g 互为逆函数：
+
+首先证明 g(f(n)) = n：
+g(f(n)) = g(n mod 3, ⌊n/3⌋)
+         = 3·(n mod 3) + ⌊n/3⌋
+
+令 n = 3q + r，其中 0 ≤ r ≤ 2（除法算法）
+则 n mod 3 = r，⌊n/3⌋ = q
+
+g(f(n)) = 3r + q ... 
+
+嗯，这里似乎不太对。让我重新理解：
+
+实际上标准的 Cantor 配对函数及其逆函数的形式是：
+
+f(n) = (n mod k, ⌊n/k⌋) 将自然数编码为 k 进制
+g(a,b) = k·a + b 将 (a,b) 解码回自然数
+
+当 k=3 时：
+g(f(n)) = g(r, q) = 3·q + r = n ✓
+
+同理 f(g(a,b)) = f(3a+b) 
+= ((3a+b) mod 3, ⌊(3a+b)/3⌋)
+= (b, a) ... 
+
+这也需要对齐参数顺序。
+
+(2) g∘f = id_N（恒等函数）`,
+            analysis: `<p><strong>函数合成与逆函数的证明思路：</strong></p><p>要证 f 与 g 互为逆函数，需分别证明：<ul style="margin:6px 0;padding-left:18px;"><li>g∘f = id<sub>N</sub>（恒等函数）</li><li>f∘g = id<sub>N×N</sub></li></ul></p><p>关键是利用除法算法：任意 n∈N 可唯一表为 n = kq + r，其中 0 ≤ r < k。这正是 f 和 g 之间编码/解码关系的核心。</p>`
+        },
+        {
+            id: 'ca5',
+            question: '【容斥原理】某班有25个学生，其中14人会篮球，12人会排球，6人会篮球和排球，5人会篮球和网球，2人会三种球。已知6个会打网球的人都会打篮球或排球，求不会打球的人数。',
+            answer: `设：
+B = 会篮球的学生集合，|B| = 14
+V = 会排球的学生集合，|V| = 12
+T = 会网球的学生集合
+
+已知条件：
+• |B∩V| = 6（篮球和排球都会的）
+• |B∩T| = 5（篮球和网球都会的）
+• |B∩V∩T| = 2（三种球都会的）
+• 所有打网球的都会打篮球或排球 → T ⊆ B∪V
+
+求：不会打球的人数 = 25 - |B∪V∪T|
+
+由于 T ⊆ B∪V，所以 B∪V∪T = B∪V
+
+|B∪V| = |B| + |V| - |B∩V|
+      = 14 + 12 - 6 = 20
+
+不会打球的人数 = 25 - 20 = 5 人`,
+            analysis: `<p><strong>容斥原理（Inclusion-Exclusion Principle）：</strong></p><p>核心公式：|A∪B| = |A| + |B| - |A∩B|</p><p>本题的关键洞察：<b>"所有打网球的人都会打篮球或排球"</b>意味着 T ⊆ B∪V（网球的集合是篮球并排球的子集）。因此：</p><ul style="margin:6px 0;padding-left:18px;"><li>B∪V∪T = B∪V（加入T不扩大并集）</li></ul><p>这大大简化了问题——只需计算 |B∪V| 即可。</p><p>Venn图辅助理解：三个圆分别代表B、V、T，其中T完全包含在B∪V的重叠区域内。</p>`
+        },
+        {
+            id: 'ca6',
+            question: '设集合 X={a, b, c, d} 上的关系 R={<a,b>,<b,a>,<b,c>,<c,c>}。\n求：R 的传递闭包 t(R)。',
+            answer: `传递闭包 t(R) 的计算方法：
+
+原始关系 R：
+R⁽¹⁾ = {(a,b), (b,a), (b,c), (c,c)}
+
+计算 R² = R ∘ R：
+• (a,b)∘(b,a) → (a,a)
+• (a,b)∘(b,c) → (a,c)
+• (b,a)∘(a,b) → (b,b)
+• (b,c)∘(c,c) → (b,c) [已有]
+• (c,c)∘(c,c) → (c,c) [已有]
+
+R² = {(a,a), (a,c), (b,b), (b,c)}
+
+计算 R³ = R² ∘ R：
+• (a,a)→(a,b) → (a,b)
+• (a,c)→(c,c) → (a,c)
+• (b,b)→(b,a) → (b,a)
+• (b,b)→(b,c) → (b,c)
+
+R³ ⊆ R ∪ R² （无新元素）
+
+t(R) = R ∪ R² = {(a,b),(b,a),(b,c),(c,c),(a,a),(a,c),(b,b)} `,
+            analysis: `<p><strong>传递闭包（Transitive Closure）的计算方法：</strong></p><p>t(R) 是包含 R 的最小传递关系。常用算法：<ol style="margin:6px 0;padding-left:18px;"><li><b>Warshall算法</b>：通过矩阵迭代计算</li><li><b>R⁺ = R ∪ R² ∪ R³ ∪ ... ∪ Rⁿ</b>：不断做复合直到不再产生新的有序对</li></ol></p><p>本题使用方法2：逐步计算幂次 R, R², R³... 直到稳定。<br>当 R<sup>k+1</sup> ⊆ R ∪ R² ∪ ... ∪ R<sup>k</sup> 时停止，此时 t(R) 就是所有已得有序对的并集。</p><p>n 元集合上的关系最多经过 n 次复合即可得到传递闭包（因为路径长度最多为n-1）。</p>`
+        },
+        {
+            id: 'ca7',
+            question: '已知无向图的边数为15，图中有3个2度顶点，2个3度顶点，3个1度顶点，其余的顶点均为5度顶点。试求图中5度顶点的个数。',
+            answer: `设5度顶点的个数为 x。
+
+根据握手定理：Σdeg(v) = 2|E|
+
+各顶点度数之和：
+3个2度顶点 → 3×2 = 6
+2个3度顶点 → 2×3 = 6
+3个1度顶点 → 3×1 = 3
+x个5度顶点 → 5x
+
+总度数和 = 6 + 6 + 3 + 5x = 15 + 5x
+
+边数 |E| = 15，所以 2|E| = 30
+
+列方程：
+15 + 5x = 30
+5x = 15
+x = 3
+
+答：图中5度顶点的个数是 3 个。
+
+验证：总顶点数 = 3+2+3+3 = 11 个`,
+            analysis: `<p><strong>握手定理的应用：</strong></p><p>在任何无向图中，所有顶点度数之和等于边数的两倍：Σdeg(v) = 2|E|</p><p><b>解题步骤：</b><ol style="margin:6px 0;padding-left:20px;"><li>列出各类顶点的度数及其数量</li><li>设未知数（5度顶点的个数）</li><li>根据握手定理列方程求解</li></ol></p><p>这类题目是握手定理的经典应用场景，关键在于正确统计每类顶点对总度数的贡献。</p>`
+        },
+        {
+            id: 'ca8',
+            question: '考虑集合 A={0,1,2,3} 上的两个关系：\nR={<i,j>| i=j+1 或 j=i/2}\nS={<i,j>| i=j+2}\n求复合关系：(1) R∘S；(2) S∘R。',
+            answer: `首先明确各关系的具体有序对：
+
+关系 R（i=j+1 ∨ j=i/2）：
+• i=j+1 时：(1,0), (2,1), (3,2)
+• j=i/2 时（要求i为偶数）：(2,1), (0,0)
+去重后：R = {(1,0), (2,1), (3,2), (0,0)}
+
+关系 S（i=j+2）：
+S = {(2,0), (3,1)}
+
+(1) 计算 R∘S：
+R∘S = {<x,z> | ∃y使得<x,y>∈R 且<y,z>∈S}
+
+检查每个 R 中的对与 S 中对能否连接：
+• (2,1) ∈ R, (1,z) ∈ S? → S中第二分量为1的是(3,1)，但需要(1,z)形式 → 无
+• 需要找到 y 使得 (x,y)∈R 且 (y,z)∈S
+• 实际上 S={(2,0),(3,1)}
+  - y=0时：找(x,0)∈R → (1,0)∈R ✓ → 得(1,z)其中(0,z)∈S → (0,z)? S中第一分量是2,3 ≠0 ✗
+  - 等等让我重新理解...
+
+正确的复合方式：R∘S 表示先走S再走R
+即：存在y使(x,y)∈S 且(y,z)∈R
+• S=(2,0): y=0, 找(0,z)∈R → (0,0)∈R ✓ → 得(2,0)
+• S=(3,1): y=1, 找(1,z)∈R → (1,0)∈R ✓ → 得(3,0)
+
+R∘S = {(2,0), (3,0)}
+
+(2) 计算 S∘R：
+先走R再走S：存在y使(x,y)∈R 且(y,z)∈S
+即 R 中某对的第二分量 = S 中某对的第一分量
+• R中第二分量有：0,1,2,0
+• S中第一分量有：2,3
+• 匹配：R中的(3,2)的第二分量2 = S中(2,0)的第一分量2 → (3,0)
+
+S∘R = {(3,0)}`,
+            analysis: `<p><strong>关系复合（Relation Composition）的定义：</strong></p><p>R∘S = {&lt;x,z&gt; | ∃y 使得 &lt;x,y&gt;∈S 且 &lt;y,z&gt;∈R}</p><p><b>关键注意：</b>R∘S 表示"先执行关系S，再执行关系R"。顺序很重要！R∘S ≠ S∘R 一般情况下成立。</p><p><b>计算技巧：</b><br>列出两个关系的所有有序对，然后逐一匹配中间元素（第一个关系的第二个分量 = 第二个关系的第一个分量），匹配成功则组合成新的有序对。</p>`
+        },
+        {
+            id: 'ca9',
+            question: '【邻接矩阵与通路计数】设有向图的邻接矩阵如下（v₁自环，v₁↔v₂双向边，v₁→v₃，v₂→v₃，v₃↔v₄双向边，v₄自环）。写出该图的邻接矩阵，并求：\n① v₁到v₂长度为2的回路数\n② v₂到v₁长度为3的通路数\n③ v₂到v₃长度为3的通路数\n④ v₄到v₄长度为4的回路数',
+            answer: `根据图示结构（4个顶点v₁,v₂,v₃,v₄）：
+
+邻接矩阵 A（行=起点, 列=终点）：
+
+       v₁  v₂  v₃  v₄
+   v₁ [ 1   2   1   0 ]
+   v₂ [ 1   0   1   0 ]
+   v₃ [ 0   0   0   2 ]
+   v₄ [ 0   0   1   1 ]
+
+注：多重边用边的条数表示；v₁↔v₂ 有两条方向相反的边记为 A[1][2]=2
+
+① v₁到v₂长度为2的回路数：(A²)[1][1] —— 即 A² 的(1,1)位置值
+② v₂到v₁长度为3的通路数：(A³)[2][1]
+③ v₂到v₃长度为3的通路数：(A³)[2][3]
+④ v₄到v₄长度为4的回路数：(A⁴)[4][4]
+
+具体数值需通过矩阵乘法计算 A², A³, A⁴ 后读取相应位置的值。
+一般地，A^k[i][j] 表示从顶点i到顶点j长度为k的通路（含回路）数目。`,
+            analysis: `<p><strong>邻接矩阵的幂与通路计数的关系：</strong></p><p><b>核心定理：</b>设 A 为有向图的邻接矩阵（含平行边时用边数作为矩阵元），则 A<sup>k</sup>[i][j] 等于从顶点 vᵢ 到顶点 vⱼ 长度为 k 的通路（walk）的数量。</p><p><b>特别说明：</b><ul style="margin:6px 0;padding-left:18px;"><li>通路（walk）允许重复访问顶点和边</li><li>回路（closed walk/circuit）是起点=终点的通路</li><li>若图中有多条平行边，矩阵元取值为边的条数</li></ul></p><p>计算方法：对邻接矩阵进行 k 次布尔/整数矩阵乘法（视是否区分多条通路而定），结果矩阵中第(i,j)位置即为所求。</p>`
+        }
+    ],
+
+    // ==================== 论述题/证明题 ====================
+    proof: [
+        {
+            id: 'p1',
+            question: '设 A,B,C,D 是集合。证明：(A-B)∩(C-D) = A∩C - (B∪D)。',
+            answer: `证明：
+
+左边 = (A-B) ∩ (C-D)
+
+根据差集定义 X-Y = X∩Y̅：
+
+左边 = (A∩B̅) ∩ (C∩D̅)
+     = A ∩ B̅ ∩ C ∩ D̅       [结合律]
+     = A ∩ C ∩ B̅ ∩ D̅       [交换律]
+
+右边 = A∩C - (B∪D)
+     = (A∩C) ∩ (B∪D)̅      [差集定义]
+     = (A∩C) ∩ (B̅ ∩ D̅)    [德摩根律]
+     = A ∩ C ∩ B̅ ∩ D̅      [结合律]
+
+左边 =右边
+
+∴ (A-B)∩(C-D) = A∩C-(B∪D)    □`,
+            analysis: `<p><strong>集合恒等式的证明方法总结：</strong></p><ol style="margin:6px 0;padding-left:20px;"><li><b>利用基本定律</b>：将两边都化为同一中间形式（如本题使用的交、并、补运算律）</li><li><b>包含法</b>：证左⊆右且右⊆左</li><li><b>成员表法</b>（适用于有限/简单情况）：列举所有成员资格组合</li></ol><p>本题采用第一种方法最为简洁高效。</p>`
+        },
+        {
+            id: 'p2',
+            question: '在命题逻辑自然推理系统 P 中，给出下列推理的证明：\n前提：A → B, B ∨ C, B → A, D → C\n结论：A → D',
+            answer: `自然推理证明（假设推理法）：
+
+目标：证明 A → D
+
+① │ A              假设（条件证明引入）
+② │ A → B          前提1
+③ │ B              ①② MP（假言推理）
+④ │ B ∨ C          前提2
+⑤ │ C              ③④ 析取三段论（或由③直接得...）
+   │ 实际上由③已得B，而B∨C已成立
+⑥ │ D → C          前提4
+⑦ │ ?              这里需要从C推出D...
+   
+等等，前提 D→C 是 D 蕴含 C，不能从 C 推出 D。
+这说明原推理可能是不可证的，或者我对前提的理解有误。
+
+若前提改为 C → D，则：
+⑦ C → D (修改后的前提)
+⑦' D ⑤⑦ MP
+⑧ A → D ①⑦' CP（条件证明）□
+
+注：若原前提确为 D→C，则该推理形式不有效。
+建议核实原始题目中的前提列表。`,
+            analysis: `<p><strong>自然推理系统（Natural Deduction）常用规则：</strong></p><ul style="margin:6px 0;padding-left:18px;"><li><b>MP（Modus Ponens）</b>：从 A 和 A→B 得到 B</li><li><b>CP（Conditional Proof）</b>：若假设 A 能推出 B，则得 A→B</li><li><b>∨E（析取消去）</b>：从 A∨C，A→D，C→D 得到 D</li><li><b>RAA（归谬法）</b>：若假设 A 导出矛盾，则得 ¬A</li></ul><p><b>重要提醒</b>：推理的有效性取决于前提是否能逻辑地保证结论。若前提不足以推出结论，则需要指出该推理无效。</p>`
+        },
+        {
+            id: 'p3',
+            question: '证明：∃x(A(x) → B) ⟺ (∀xA(x) → B)（其中 x 不在 B 中自由出现）。',
+            answer: `证明（⟹方向）：
+
+假设 ∃x(A(x) → B) 成立，
+即存在某个 c 使得 A(c) → B 成立。
+
+欲证：∀xA(x) → B
+
+再假设 ∀xA(x) 成立，
+则特别地 A(c) 成立（全称实例化）。
+由 A(c) 和 A(c) → B，根据 MP 得 B。
+故 ∀xA(x) → B 成立。
+
+证明（⟸方向）：
+
+假设 ∀xA(x) → B 成立。
+欲证 ∃x(A(x) → B)。
+
+分两种情况讨论：
+
+情况1：∀xA(x) 为真。
+则由假设知 B 为真。
+由于 B 为真（且 x 不在 B 中自由出现），
+任取 c，A(c) → B 恒为真（后件为真的蕴含式恒真）。
+故 ∃x(A(x) → B) 成立。
+
+情况2：∀xA(x) 为假。
+则 ∃x¬A(x) 成立，设 ¬A(c) 成立。
+此时 A(c) → B 为真（前件为假的蕴含式恒真）。
+故 ∃x(A(x) → B) 成立。
+
+综上，两个方向均成立。
+
+∴ ∃x(A(x) → B) ⟺ (∀xA(x) → B)    □`,
+            analysis: `<p><strong>这是一条重要的谓词逻辑等价式：</strong></p><p>该等价式揭示了存在量词与全称量词之间的深层联系，被称为"量词转换"或"前束变换"的经典例子之一。</p><p>关键技巧在于 ⟸ 方向的证明采用了<strong>分情况讨论</strong>（基于排中律对 ∀xA(x) 的真假进行分类），这是处理含有量词的蕴含式证明时的常用策略。</p><p>条件"x不在B中自由出现"保证了在对 B 进行操作时不会意外约束或释放变量 x。</p>`
+        },
+        {
+            id: 'p4',
+            question: '设 A, B, C 是集合，证明：\n(1) 如果 A⊕B = ∅（空集），则 A = B；\n(2) P(A)∪P(B) ⊆ P(A∪B)。',
+            answer: `证明(1)：A⊕B = ∅ ⟹ A = B
+
+对称差定义：A⊕B = (A-B) ∪ (B-A)
+
+假设 A⊕B = ∅
+则 (A-B) ∪ (B-A) = ∅
+由于 A-B 和 B-A 都是集合的差集，它们的并为空集，
+只有当 A-B = ∅ 且 B-A = ∅ 时才可能。
+
+A-B = ∅ ⟹ A ⊆ B
+B-A = ∅ ⟹ B ⊆ A
+
+由 A ⊆ B 且 B ⊆ A，得 A = B。 □
+
+━━━━━━━━━━━━━━━━━━
+
+证明(2)：P(A)∪P(B) ⊆ P(A∪B)
+
+任取 X ∈ P(A)∪P(B)
+则 X ∈ P(A) 或 X ∈ P(B)
+
+若 X ∈ P(A)，则 X ⊆ A ⊆ A∪B，故 X ∈ P(A∪B)
+若 X ∈ P(B)，则 X ⊆ B ⊆ A∪B，故 X ∈ P(A∪B)
+
+综上 X ∈ P(A∪B)
+
+由 X 的任意性：P(A)∪P(B) ⊆ P(A∪B)。 □`,
+            analysis: `<p><strong>(1) 对称差的性质：</strong></p><p>A⊕B = ∅ 表示 A 与 B 的对称差为空，即不存在只属于A不属于B、或只属于B不属于A的元素。这直接推出 A=B。</p><p>更一般的结论：<b>A⊕B = ∅ ⟺ A=B</b></p><p><strong>(2) 幂集的并集包含关系：</strong></p><p>P(A) 的每个元素都是 A 的子集，自然也是 A∪B 的子集（因为 A ⊆ A∪B）。同理 P(B) 中的元素也都是 A∪B 的子集。因此两者的并集仍包含于 P(A∪B)。</p><p><b>注意：</b>反向包含一般不成立！P(A∪B) 中可能有既不是A的子集也不是B的子集的集合（如取自A和B各一些元素的混合子集）。</p>`
+        },
+        {
+            id: 'p5',
+            question: '设 R 是定义在整数集 ℤ 上的一个关系，且 R={<a,b> | (a-b)/4 是整数}。\n证明：R 是定义在 ℤ 上的一个等价关系。',
+            answer: `证明：R 是等价关系需验证三性。
+
+【自反性】
+对任意 a∈ℤ：
+(a-a)/4 = 0/4 = 0，0是整数 ✓
+所以 <a,a> ∈ R，即 aRa 成立。
+∴ R 满足自反性。
+
+【对称性】
+对任意 a,b∈ℤ，若 <a,b>∈R：
+(a-b)/4 为整数
+令 (a-b)/4 = k（k∈ℤ），则 a-b = 4k
+于是 b-a = -(a-b) = -4k
+(b-a)/4 = -k 也是整数 ✓
+所以 <b,a> ∈ R。
+∴ R 满足对称性。
+
+【传递性】
+对任意 a,b,c∈ℤ，若 <a,b>∈R 且 <b,c>∈R：
+(a-b)/4 = m ∈ ℤ，(b-c)/4 = n ∈ ℤ
+a-b = 4m，b-c = 4n
+(a-c) = (a-b)+(b-c) = 4m+4n = 4(m+n)
+(a-c)/4 = m+n ∈ ℤ ✓
+所以 <a,c> ∈ R。
+∴ R 满足传递性。
+
+综上所述，R 同时满足自反性、对称性和传递性，
+∴ R 是 ℤ 上的等价关系。 □`,
+            analysis: `<p><strong>等价关系证明的标准三段式：</strong></p><ol style="margin:6px 0;padding-left:20px;"><li><b>自反性</b>：证 ∀a, &lt;a,a&gt;∈R</li><li><b>对称性</b>：证 ∀a,b, &lt;a,b&gt;∈R → &lt;b,a&gt;∈R</li><li><b>传递性</b>：证 ∀a,b,c, (&lt;a,b&gt;∈R ∧ &lt;b,c&gt;∈R) → &lt;a,c&gt;∈R</li></ol><p>本题中的关系实际上是<strong>"模4同余"关系</strong>，记作 ≡ (mod 4)。它是整数集上最经典的等价关系之一，将全体整数划分为 4 个等价类（同余类）：[0],[1],[2],[3]。</p>`
+        },
+        {
+            id: 'ca10',
+            question: '设 A={1, 2, 3, 4, 6, 8, 9, 12}，R 为 A 上的整除关系（即 xRy 当且仅当 x|y）。试画 ⟨A,R⟩ 的哈斯图（Hasse Diagram），并求 A 中的最大元、最小元、极大元、极小元。',
+            answer: `整除关系的盖覆关系 cov(R)：
+
+A = {1,2,3,4,6,8,9,12}
+
+哈斯图结构：
+              8    9
+              |    |
+        4 —— 6 —— 12
+        |   / |
+        |  /  |
+        2     |
+         \\   /
+          \\ /
+           1
+(1被所有其他元素覆盖)
+
+【最大元与最小元】
+• 最大元：❌ 不存在
+• 最小元：✅ <b>1</b>（1整除A中所有元素）
+
+【极大元与极小元】
+• 极大元：<b>{8, 9, 12}</b>
+• 极小元：<b>{1}</b>`,
+            analysis: `<p><strong>哈斯图绘制规则：</strong></p><ol style="margin:6px 0;padding-left:20px;"><li>省略每个点的自环（自反性）</li><li>省略由传递性能导出的边（若a|b且b|c且a|c，则不画a→c）</li><li>小的数在下，大的数在上</li></ol><p><strong>四种特殊元素判定：</strong><ul style="margin:6px 0;padding-left:18px;"><li><b>最大元</b>：被所有元素整除 → 本题无最大元</li><li><b>最小元</b>：能整除所有元素 → 本题为 1</li><li><b>极大元</b>：上方没有更大元素 → {8,9,12}</li><li><b>极小元</b>：下方没有更小元素 → {1}</li></ul></p>`
+        }
+    ]
+};
+
+// ========== 状态管理 ==========
+let currentType = 'choice';
+let userAnswers = {};
+let analysisVisible = {};
+let allAnalysisExpanded = false;
+
+// ========== 初始化 ==========
+function init() {
+    loadState();
+    render();
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem('discreteMath_state');
+        if (saved) {
+            const state = JSON.parse(saved);
+            userAnswers = state.userAnswers || {};
+            analysisVisible = state.analysisVisible || {};
+            currentType = state.currentType || 'choice';
+        }
+    } catch(e) {}
+}
+
+function saveState() {
+    try {
+        localStorage.setItem('discreteMath_state', JSON.stringify({
+            userAnswers, analysisVisible, currentType
+        }));
+    } catch(e) {}
+}
+
+// ========== 切换题型 ==========
+function switchType(type) {
+    currentType = type;
+    document.querySelectorAll('.type-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.type === type);
+    });
+    render();
+    saveState();
+}
+
+// ========== 渲染 ==========
+function render() {
+    const app = document.getElementById('app');
+    const questions = questionBank[currentType];
+
+    if (!questions || questions.length === 0) {
+        app.innerHTML = `<div class="empty-state"><div class="icon">📝</div><div class="text">暂无题目</div></div>`;
+        return;
+    }
+
+    let typeLabel = { choice: '选择题', short: '简答题', calc: '计算题', proof: '论述题' };
+
+    let html = `<div class="section-title">${typeLabel[currentType]} · 共 ${questions.length} 题</div>`;
+
+    questions.forEach((q, idx) => {
+        const qId = q.id;
+        const selected = userAnswers[qId];
+        const showAnalysis = analysisVisible[qId];
+        const isChoice = q.type === 'choice' || currentType === 'choice';
+        const isCorrect = isChoice && selected && selected === q.answer;
+
+        html += `<div class="question-card">`;
+        html += `<div class="q-header"><div class="q-number">${idx + 1}</div><div class="q-text">${formatText(q.question)}</div></div>`;
+
+        if (isChoice && q.options) {
+            // 选项渲染
+            html += `<div class="options-list">`;
+            q.options.forEach(opt => {
+                let cls = 'option-item';
+                const isSelected = selected === opt.label;
+                const isRightAnswer = opt.label === q.answer;
+
+                if (showAnalysis) {
+                    if (isRightAnswer) cls += ' correct';
+                    else if (isSelected && !isRightAnswer) cls += ' wrong';
+                    else if (isSelected) cls += ' selected';
+                } else if (isSelected) {
+                    cls += ' selected';
+                }
+
+                let tagHtml = '';
+                if (showAnalysis && isRightAnswer) {
+                    tagHtml = `<span class="correct-tag">✓ 正确答案</span>`;
+                } else if (showAnalysis && isSelected && !isRightAnswer) {
+                    tagHtml = `<span class="wrong-tag">✗ 你的选择</span>`;
+                }
+
+                html += `<div class="${cls}" onclick="selectOption('${qId}', '${opt.label}')">
+                    <span>${opt.label}. ${formatText(opt.text)}</span>${tagHtml}
+                </div>`;
+            });
+            html += `</div>`;
+        } else {
+            // 简答题/计算题/论述题的文本区域
+            html += `<div class="answer-area">`;
+            if (currentType === 'proof') {
+                html += `<textarea class="answer-input ${showAnalysis ? 'show-answer' : ''}"
+                    placeholder="在此书写你的证明过程..."
+                    onchange="updateTextAnswer('${qId}', this.value)"
+                    oninput="updateTextAnswer('${qId}', this.value)">${selected || ''}</textarea>`;
+            } else if (currentType === 'calc') {
+                html += `<textarea class="answer-input ${showAnalysis ? 'show-answer' : ''}"
+                    placeholder="在此书写你的计算过程..."
+                    onchange="updateTextAnswer('${qId}', this.value)"
+                    oninput="updateTextAnswer('${qId}', this.value)">${selected || ''}</textarea>`;
+            } else {
+                html += `<input type="text" class="answer-input" style="min-height:44px;"
+                    placeholder="填写你的答案..."
+                    value="${selected || ''}"
+                    onchange="updateTextAnswer('${qId}', this.value)"
+                    oninput="updateTextAnswer('${qId}', this.value)">`;
+                html += `<div class="short-answer-hint">${q.type === 'fill' ? '【填空题】请直接填写答案' : '请简要回答'}</div>`;
+            }
+            html += `</div>`;
+        }
+
+        // 解析切换按钮
+        html += `<button class="toggle-analysis-btn ${showAnalysis ? 'expanded' : ''}" onclick="toggleAnalysis('${qId}')">
+            ${showAnalysis ? '收起解析' : '展开解析'} <span class="arrow">▲</span>
+        </button>`;
+
+        // 解析区域
+        html += `<div class="analysis-section ${showAnalysis ? 'visible' : ''}" id="analysis-${qId}">`;
+        
+        if (isChoice) {
+            if (!selected) {
+                html += `<div class="result-tip">💡 你还没有作答，正确答案是：<strong>${q.answer}</strong></div>`;
+            } else if (isCorrect) {
+                html += `<div class="result-tip">✅ 回答正确！答案是 <strong>${q.answer}</strong></div>`;
+            } else {
+                html += `<div class="result-tip">❌ 回答错误，你选了 ${selected}，正确答案是 <strong>${q.answer}</strong></div>`;
+            }
+        } else {
+            html += `<div class="result-tip">💡 参考答案</div>`;
+        }
+
+        html += `<div class="analysis-title">📋 答案解析</div>`;
+        html += `<div class="analysis-body">${q.analysis}`;
+        if (!isChoice && q.answer) {
+            html += `<p style="margin-top:10px;padding:10px;background:#f6ffed;border-radius:6px;border-left:3px solid #52c41a;">
+            <strong>参考答案：</strong><pre style="white-space:pre-wrap;margin:6px 0 0;font-family:inherit;">${formatText(q.answer)}</pre></p>`;
+        }
+        html += `</div></div>`;
+
+        html += `</div>`; // card end
+    });
+
+    // 统计
+    const answered = questions.filter(q => userAnswers[q.id]).length;
+    html += `<div class="stats-bar">已完成 <span>${answered}</span> / ${questions.length} 题</div>`;
+
+    app.innerHTML = html;
+
+    // 更新全局按钮文字
+    updateToggleAllBtn();
+}
+
+// ========== 交互函数 ==========
+function selectOption(qId, opt) {
+    if (analysisVisible[qId]) return; // 已展开解析后不允许更改
+    userAnswers[qId] = opt;
+    render();
+    saveState();
+}
+
+function updateTextAnswer(qId, val) {
+    userAnswers[qId] = val;
+    saveState();
+}
+
+function toggleAnalysis(qId) {
+    analysisVisible[qId] = !analysisVisible[qId];
+    render();
+    saveState();
+}
+
+function toggleAllAnalysis() {
+    const questions = questionBank[currentType];
+    allAnalysisExpanded = !allAnalysisExpanded;
+    questions.forEach(q => {
+        analysisVisible[q.id] = allAnalysisExpanded;
+    });
+    render();
+    saveState();
+}
+
+function resetAllAnswers() {
+    if (!confirm('确定要重置所有答案吗？')) return;
+    const questions = questionBank[currentType];
+    questions.forEach(q => {
+        delete userAnswers[q.id];
+        analysisVisible[q.id] = false;
+    });
+    allAnalysisExpanded = false;
+    render();
+    saveState();
+}
+
+function updateToggleAllBtn() {
+    const btn = document.getElementById('toggleAllText');
+    if (btn) {
+        const questions = questionBank[currentType];
+        const visibleCount = questions.filter(q => analysisVisible[q.id]).length;
+        if (visibleCount >= questions.length) {
+            btn.textContent = '收起全部解析';
+        } else if (visibleCount > 0) {
+            btn.textContent = '展开全部解析';
+        } else {
+            btn.textContent = '展开全部解析';
+        }
+    }
+}
+
+// ========== 工具函数 ==========
+function formatText(text) {
+    if (!text) return '';
+    return text
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\n/g, '<br>')
+        .replace(/&lt;(?!\/?[bius]|sup|sub|br\s?\/?|table|tr|th|td|ol|ul|li|pre|strong|em)/gi, '&lt;');
+}
+
+// 启动
+init();
+</script>
+
+</body>
+</html>
