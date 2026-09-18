@@ -309,7 +309,16 @@
             .options-list, .answer-area, .toggle-analysis-btn, .analysis-section { margin-left: 0; }
         }
     </style>
-</head>
+<style>.ca-topic{--ca-ink:#173a2b;--ca-green:#347047;--ca-line:#d6e9d5;--ca-muted:#577567;color:var(--ca-ink);margin:22px 0;font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;text-align:left;line-height:1.5;min-width:0}
+.ca-topic *{box-sizing:border-box}.ca-topic button{font:inherit;cursor:pointer;letter-spacing:normal;transform:none;box-shadow:none}.ca-topic button:focus-visible{outline:3px solid #76994c;outline-offset:3px}.ca-topic button:hover{filter:brightness(.97)}
+.ca-topic-summary{display:flex;align-items:center;justify-content:space-around;gap:12px;background:white;border:1px solid var(--ca-line);border-radius:16px;margin-bottom:16px;padding:16px;color:var(--ca-muted);font-size:14px}.ca-topic-summary span{flex:1;text-align:center}.ca-topic-summary span+span{border-left:1px solid var(--ca-line)}.ca-topic-summary strong{color:var(--ca-ink);font-size:25px;margin-right:5px;font-variant-numeric:tabular-nums}
+.ca-topic-card{background:#fff;border:1px solid var(--ca-line);border-radius:22px;padding:24px;box-shadow:0 6px 22px #173a2b04}.ca-topic-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.ca-topic h2{font-size:22px;margin:0;font-weight:800;line-height:1.4;color:var(--ca-ink)}.ca-topic-head p{margin:4px 0 0;color:var(--ca-muted);font-size:14px}.ca-topic-switch{display:flex;flex-shrink:0;padding:3px;border:1px solid var(--ca-line);border-radius:11px;background:#f7fbf6}.ca-topic-switch button{border:0;background:transparent;border-radius:8px;padding:8px 14px;min-height:42px;font-size:14px;color:var(--ca-green)}.ca-topic-switch [aria-pressed=true]{background:var(--ca-green);color:#fff}
+.ca-topic-row{display:grid;grid-template-columns:minmax(130px,1.3fr) minmax(68px,.6fr) minmax(90px,2fr) 64px;gap:16px;align-items:center;width:100%;min-height:60px;padding:12px;border:1px solid transparent;border-bottom-color:#edf3ec;background:#fff;border-radius:8px;color:var(--ca-ink);text-align:left}.ca-topic-row[aria-pressed=true]{background:#eff8e7;border-color:#bddba7}.ca-topic-name{font-size:16px;font-weight:700;overflow-wrap:anywhere}.ca-topic-meta{font-size:14px;color:var(--ca-muted)}.ca-topic-track{display:block;height:10px;border-radius:8px;background:#e7efea;overflow:hidden}.ca-topic-track i{display:block;height:100%;background:var(--ca-green);border-radius:8px}.ca-topic-percent{text-align:right;font-size:16px;font-variant-numeric:tabular-nums}.ca-topic-more{display:block;margin:12px auto 0;min-height:44px;padding:8px 18px;color:var(--ca-green);background:#f6fbf4;border:1px solid var(--ca-line);border-radius:9px}
+.ca-topic-detail{margin-top:20px;background:#f3faed;border:1px solid var(--ca-line);border-radius:14px;padding:18px}.ca-topic-detail-title{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.ca-topic h3{margin:0;font-size:18px;color:var(--ca-ink);overflow-wrap:anywhere}.ca-topic-detail-title>span{background:#dcefcf;color:var(--ca-green);padding:4px 9px;border-radius:99px;font-size:12px}.ca-topic-tags{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 16px}.ca-topic-tags span{font-size:14px;padding:4px 9px;border:1px solid var(--ca-line);border-radius:12px;background:#ffffffb0;color:var(--ca-muted);overflow-wrap:anywhere;max-width:100%}.ca-topic-detail-bottom{display:flex;gap:16px;align-items:flex-end;justify-content:space-between}.ca-topic-questions{display:flex;flex-wrap:wrap;gap:7px;align-items:center;min-width:0}.ca-topic-questions>span{font-size:14px;color:var(--ca-muted);margin-right:3px}.ca-topic-questions button{min-width:44px;min-height:44px;padding:8px;border:1px solid #a9c998;border-radius:8px;color:var(--ca-ink);background:white;font-size:14px}.ca-topic-practice,.ca-topic-all{min-height:46px;background:var(--ca-green);color:white;border:0;border-radius:10px;padding:11px 19px;font-size:15px!important;font-weight:700!important;flex-shrink:0}.ca-topic-note{margin:17px 0 0;color:var(--ca-muted);font-size:13px}.ca-topic-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px}.ca-topic-mode{font-size:14px;color:var(--ca-muted)}
+.ca-topic-host{max-width:980px;margin:24px auto;padding:0 16px}.ca-topic-question-hidden{display:none!important}
+@media(max-width:680px){.ca-topic{margin:16px 0}.ca-topic-card{padding:16px 12px;border-radius:18px}.ca-topic-head{gap:8px;align-items:flex-start}.ca-topic h2{font-size:19px}.ca-topic-head p{font-size:13px}.ca-topic-switch button{padding:8px 9px;font-size:13px}.ca-topic-summary{padding:12px 8px;gap:4px}.ca-topic-summary strong{font-size:21px}.ca-topic-row{grid-template-columns:minmax(0,1.2fr) minmax(55px,1fr) 49px;gap:3px 10px;padding:11px 8px}.ca-topic-name{grid-column:1;grid-row:1;font-size:14px}.ca-topic-meta{grid-column:1;grid-row:2;font-size:12px}.ca-topic-track{grid-column:2;grid-row:1/3;height:8px}.ca-topic-percent{grid-column:3;grid-row:1/3;font-size:14px}.ca-topic-detail{padding:13px 10px}.ca-topic-detail-bottom{display:block}.ca-topic-practice{width:100%;margin-top:14px}.ca-topic-tags span{font-size:13px}.ca-topic-actions{align-items:stretch;flex-direction:column}.ca-topic-all{width:100%}.ca-topic-host{padding:0 12px}.ca-topic-note{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.ca-topic *{scroll-behavior:auto!important;transition:none!important}}
+</style></head>
 <body>
 
 <div class="nav-header">
@@ -330,8 +339,56 @@
     </div>
 </div>
 
-<div class="main-container" id="app"></div>
+<div class="ca-topic-host" id="topic-host"></div><div class="main-container" id="app"></div>
 
+<script>/* Shared learning-topic overview. No answers or progress records are changed here. */
+(() => {
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function summarize(questions) {
+    const scored = questions.length > 0 && questions.every(q => typeof q.score === 'number' && Number.isFinite(q.score) && q.score > 0);
+    const groups = new Map();
+    questions.forEach((q,index) => {
+      const name = q.topic || q.point || '综合应用';
+      if (!groups.has(name)) groups.set(name,{name,items:[],points:[],score:0});
+      const group=groups.get(name);
+      group.items.push({...q,index});
+      if(q.point && !group.points.includes(q.point))group.points.push(q.point);
+      if(scored)group.score+=q.score;
+    });
+    return {scored,total:questions.length,totalScore:scored?questions.reduce((n,q)=>n+q.score,0):null,groups:[...groups.values()]};
+  }
+  function mount({container,questions,onJump,onPractice,onReset}) {
+    const data=summarize(questions);
+    if(!data.total)return null;
+    let metric=data.scored?'score':'count',selected=null,expanded=false,active=null;
+    const root=document.createElement('section');root.className='ca-topic';root.setAttribute('aria-label','本套考点分析');container.append(root);
+    const value=g=>metric==='score'?g.score:g.items.length;
+    const total=()=>metric==='score'?data.totalScore:data.total;
+    const ordered=()=>data.groups.slice().sort((a,b)=>value(b)-value(a));
+    selected=ordered()[0].name;
+    const percent=g=>Number((value(g)/total()*100).toFixed(1));
+    function render() {
+      const list=ordered(),visible=expanded?list:list.slice(0,7),g=data.groups.find(g=>g.name===selected);
+      root.innerHTML=`<div class="ca-topic-summary"><span><strong>${data.total}</strong> 道题</span>${data.scored?`<span><strong>${data.totalScore}</strong> 分</span>`:''}<span><strong>${data.groups.length}</strong> 类考点</span></div>
+      <div class="ca-topic-card"><div class="ca-topic-head"><div><h2>本套考点分布</h2><p>看看这套题，重点练什么</p></div><div class="ca-topic-switch" role="group" aria-label="统计方式">${data.scored?`<button type="button" data-metric="score" aria-pressed="${metric==='score'}">按分值</button>`:''}<button type="button" data-metric="count" aria-pressed="${metric==='count'}">按题数</button></div></div>
+      <div class="ca-topic-rows">${visible.map(g=>`<button type="button" class="ca-topic-row" data-topic="${esc(g.name)}" aria-pressed="${selected===g.name}" aria-label="${esc(g.name)}，${g.items.length}题${data.scored?'，'+g.score+'分':''}，占${percent(g)}%"><span class="ca-topic-name">${esc(g.name)}</span><span class="ca-topic-meta">${g.items.length}题${data.scored?' · '+g.score+'分':''}</span><span class="ca-topic-track" aria-hidden="true"><i style="width:${percent(g)}%"></i></span><strong class="ca-topic-percent">${percent(g)}%</strong></button>`).join('')}</div>
+      ${list.length>7?`<button type="button" class="ca-topic-more" aria-expanded="${expanded}">${expanded?'收起考点':'展开全部 '+list.length+' 类考点'}</button>`:''}
+      <div class="ca-topic-detail" aria-live="polite"><div class="ca-topic-detail-title"><h3>${esc(g.name)}</h3><span>已选考点</span></div><div class="ca-topic-tags">${g.points.map(p=>`<span>${esc(p)}</span>`).join('')}</div><div class="ca-topic-detail-bottom"><div class="ca-topic-questions"><span>对应题目</span>${g.items.map(q=>`<button type="button" data-question="${q.index}" aria-label="跳转到${esc(q.no)}题">${esc(q.no)}</button>`).join('')}</div><button type="button" class="ca-topic-practice">只练该考点 →</button></div></div>
+      <p class="ca-topic-note">按主考点统计，每题只计一次。${data.scored?'':'本套按题数展示占比。'}</p></div>
+      <div class="ca-topic-actions"><span class="ca-topic-mode" role="status">${active?'专项练习：'+esc(active):'整套练习'}</span><button type="button" class="ca-topic-all">${active?'退出专项 · 练习整套':'开始整套练习 →'}</button></div>`;
+      root.querySelectorAll('[data-topic]').forEach(b=>b.addEventListener('click',()=>{selected=b.dataset.topic;render();root.querySelectorAll('[data-topic]').forEach(el=>{if(el.dataset.topic===selected)el.focus({preventScroll:true});});}));
+      root.querySelectorAll('[data-metric]').forEach(b=>b.addEventListener('click',()=>{metric=b.dataset.metric;render();root.querySelector(`[data-metric="${metric}"]`).focus({preventScroll:true});}));
+      root.querySelector('.ca-topic-more')?.addEventListener('click',()=>{expanded=!expanded;render();root.querySelector('.ca-topic-more').focus({preventScroll:true});});
+      root.querySelectorAll('[data-question]').forEach(b=>b.addEventListener('click',()=>onJump(Number(b.dataset.question))));
+      root.querySelector('.ca-topic-practice').addEventListener('click',()=>{active=g.name;render();onPractice(g.items.map(q=>q.index),g.name);});
+      root.querySelector('.ca-topic-all').addEventListener('click',()=>{active=null;render();onReset();});
+    }
+    render();
+    return {root,data,clear(){active=null;render();}};
+  }
+  window.CaigouTopics={mount,summarize};
+})();
+</script>
 <script>
 // ========== 题库数据 ==========
 const questionBank = {
@@ -1095,6 +1152,8 @@ A = {1,2,3,4,6,8,9,12}
 };
 
 // ========== 状态管理 ==========
+let topicFilter = null, topicName = '', topicView = null;
+function visibleQuestions(){ return topicFilter ? Object.values(questionBank).flat().filter(q=>topicFilter.includes(q.id)) : questionBank[currentType]; }
 let currentType = 'choice';
 let userAnswers = {};
 let analysisVisible = {};
@@ -1128,6 +1187,7 @@ function saveState() {
 
 // ========== 切换题型 ==========
 function switchType(type) {
+    topicFilter=null;topicView?.clear();
     currentType = type;
     document.querySelectorAll('.type-tab').forEach(t => {
         t.classList.toggle('active', t.dataset.type === type);
@@ -1139,7 +1199,7 @@ function switchType(type) {
 // ========== 渲染 ==========
 function render() {
     const app = document.getElementById('app');
-    const questions = questionBank[currentType];
+    const questions = visibleQuestions();
 
     if (!questions || questions.length === 0) {
         app.innerHTML = `<div class="empty-state"><div class="icon">📝</div><div class="text">暂无题目</div></div>`;
@@ -1148,17 +1208,18 @@ function render() {
 
     let typeLabel = { choice: '选择题', short: '简答题', calc: '计算题', proof: '论述题' };
 
-    let html = `<div class="section-title">${typeLabel[currentType]} · 共 ${questions.length} 题</div>`;
+    let html = `<div class="section-title">${topicFilter ? topicName + " · 专项练习" : typeLabel[currentType]} · 共 ${questions.length} 题</div>`;
 
     questions.forEach((q, idx) => {
         const qId = q.id;
         const selected = userAnswers[qId];
         const showAnalysis = analysisVisible[qId];
-        const isChoice = q.type === 'choice' || currentType === 'choice';
+        const questionType = topicFilter ? Object.keys(questionBank).find(type => questionBank[type].some(item => item.id === q.id)) : currentType;
+        const isChoice = q.type === 'choice' || questionType === 'choice';
         const isCorrect = isChoice && selected && selected === q.answer;
 
-        html += `<div class="question-card">`;
-        html += `<div class="q-header"><div class="q-number">${idx + 1}</div><div class="q-text">${formatText(q.question)}</div></div>`;
+        html += `<div class="question-card" id="topic-question-${q.id}" tabindex="-1">`;
+        html += `<div class="q-header"><div class="q-number">${topicFilter ? q.id : idx + 1}</div><div class="q-text">${formatText(q.question)}</div></div>`;
 
         if (isChoice && q.options) {
             // 选项渲染
@@ -1191,12 +1252,12 @@ function render() {
         } else {
             // 简答题/计算题/论述题的文本区域
             html += `<div class="answer-area">`;
-            if (currentType === 'proof') {
+            if (questionType === 'proof') {
                 html += `<textarea class="answer-input ${showAnalysis ? 'show-answer' : ''}"
                     placeholder="在此书写你的证明过程..."
                     onchange="updateTextAnswer('${qId}', this.value)"
                     oninput="updateTextAnswer('${qId}', this.value)">${selected || ''}</textarea>`;
-            } else if (currentType === 'calc') {
+            } else if (questionType === 'calc') {
                 html += `<textarea class="answer-input ${showAnalysis ? 'show-answer' : ''}"
                     placeholder="在此书写你的计算过程..."
                     onchange="updateTextAnswer('${qId}', this.value)"
@@ -1273,7 +1334,7 @@ function toggleAnalysis(qId) {
 }
 
 function toggleAllAnalysis() {
-    const questions = questionBank[currentType];
+    const questions = visibleQuestions();
     allAnalysisExpanded = !allAnalysisExpanded;
     questions.forEach(q => {
         analysisVisible[q.id] = allAnalysisExpanded;
@@ -1284,7 +1345,7 @@ function toggleAllAnalysis() {
 
 function resetAllAnswers() {
     if (!confirm('确定要重置所有答案吗？')) return;
-    const questions = questionBank[currentType];
+    const questions = visibleQuestions();
     questions.forEach(q => {
         delete userAnswers[q.id];
         analysisVisible[q.id] = false;
@@ -1297,7 +1358,7 @@ function resetAllAnswers() {
 function updateToggleAllBtn() {
     const btn = document.getElementById('toggleAllText');
     if (btn) {
-        const questions = questionBank[currentType];
+        const questions = visibleQuestions();
         const visibleCount = questions.filter(q => analysisVisible[q.id]).length;
         if (visibleCount >= questions.length) {
             btn.textContent = '收起全部解析';
@@ -1321,6 +1382,15 @@ function formatText(text) {
 
 // 启动
 init();
+
+const topicMetadata={"c3":{"topic":"命题逻辑","point":"命题与真值"},"c7":{"topic":"命题逻辑","point":"命题公式类型"},"c8":{"topic":"命题逻辑","point":"逻辑等价式"},"c9":{"topic":"命题逻辑","point":"命题推理"},"s1":{"topic":"命题逻辑","point":"充分条件与必要条件"},"s3":{"topic":"命题逻辑","point":"复合命题真值"},"s4":{"topic":"命题逻辑","point":"有效推理与重言式"},"s7":{"topic":"命题逻辑","point":"命题等价类"},"ca1":{"topic":"命题逻辑","point":"主析取范式"},"p2":{"topic":"命题逻辑","point":"自然推理"},"c15":{"topic":"谓词逻辑","point":"合式公式"},"s9":{"topic":"谓词逻辑","point":"前束范式"},"s12":{"topic":"谓词逻辑","point":"谓词符号化"},"p3":{"topic":"谓词逻辑","point":"量词等价变换"},"c4":{"topic":"集合与计数","point":"幂集基数"},"c6":{"topic":"集合与计数","point":"集合运算"},"c16":{"topic":"集合与计数","point":"对称差"},"s2":{"topic":"集合与计数","point":"集合表示"},"s5":{"topic":"集合与计数","point":"集合划分"},"s13":{"topic":"集合与计数","point":"属于与包含"},"s15":{"topic":"集合与计数","point":"幂集与笛卡尔积"},"ca5":{"topic":"集合与计数","point":"容斥原理"},"p1":{"topic":"集合与计数","point":"集合恒等式"},"p4":{"topic":"集合与计数","point":"对称差与幂集"},"c5":{"topic":"关系与函数","point":"二元关系计数"},"c11":{"topic":"关系与函数","point":"关系性质"},"c17":{"topic":"关系与函数","point":"等价关系"},"s6":{"topic":"关系与函数","point":"关系性质"},"s8":{"topic":"关系与函数","point":"同余与等价类"},"ca2":{"topic":"关系与函数","point":"关系矩阵与性质"},"ca4":{"topic":"关系与函数","point":"逆函数与复合函数"},"ca6":{"topic":"关系与函数","point":"传递闭包"},"ca8":{"topic":"关系与函数","point":"复合关系"},"p5":{"topic":"关系与函数","point":"等价关系证明"},"ca3":{"topic":"偏序与哈斯图","point":"偏序与盖覆关系"},"ca10":{"topic":"偏序与哈斯图","point":"哈斯图与特殊元素"},"c1":{"topic":"图论","point":"平面图与对偶图"},"c2":{"topic":"图论","point":"度序列"},"c10":{"topic":"图论","point":"通路计数"},"c12":{"topic":"图论","point":"欧拉图"},"c13":{"topic":"图论","point":"握手定理"},"c14":{"topic":"图论","point":"子图与同构"},"s10":{"topic":"图论","point":"完全图与欧拉图"},"s11":{"topic":"图论","point":"边连通度"},"s14":{"topic":"图论","point":"顶点与边的删除"},"ca7":{"topic":"图论","point":"握手定理"},"ca9":{"topic":"图论","point":"邻接矩阵与通路计数"}};
+const topicQuestions=Object.entries(questionBank).flatMap(([type,qs])=>qs.map((q,i)=>({id:q.id,no:({choice:'选择',short:'简答',calc:'计算',proof:'论述'}[type])+(i+1),type,...topicMetadata[q.id]})));
+function scrollTopicQuestion(id){const card=document.getElementById('topic-question-'+id);card?.scrollIntoView({block:'start',behavior:'smooth'});card?.focus({preventScroll:true});}
+topicView=CaigouTopics.mount({container:document.getElementById('topic-host'),questions:topicQuestions,
+onJump(index){const q=topicQuestions[index];if(!topicFilter?.includes(q.id))switchType(q.type);scrollTopicQuestion(q.id);},
+onPractice(indices,name){topicFilter=indices.map(i=>topicQuestions[i].id);topicName=name;document.querySelectorAll('.type-tab').forEach(b=>b.classList.remove('active'));render();scrollTopicQuestion(topicFilter[0]);},
+onReset(){topicFilter=null;switchType(currentType);document.getElementById('app').scrollIntoView({block:'start',behavior:'smooth'});}
+});
 </script>
 
 </body>
